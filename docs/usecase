@@ -1,0 +1,78 @@
+@startuml
+left to right direction
+
+:Admin: as admin
+:Office Manager: as office
+:Buyer: as buyer
+:Notifier: as notifier << Background job >> #SkyBlue;line:RoyalBlue;line.bold;text:RoyalBlue
+
+rectangle Notifications {
+    usecase n1 as "Notify
+    --
+    Notify about order changes"
+
+    usecase n2 as "Remind
+    --
+    Send reminder about orders
+    waiting for approval"
+}
+
+notifier -> n1
+notifier -> n2
+
+rectangle Administration {
+    usecase a1 as "Update role
+    --
+    Convert user to Office Manager or
+    take this role away"
+
+    usecase a2 as "Anonymize
+    --
+    Remove user data to be GDPR compliant,
+    associated orders are not removed"
+}
+
+admin -> a1
+admin -> a2
+
+rectangle Ordering {
+    usecase "Browse orders" as o1
+    usecase "Create new order" as o2
+    usecase "Edit my order" as o3
+    usecase "Delete my order" as o4
+}
+
+
+buyer -> o1
+buyer -> o2
+buyer -> o3
+buyer -> o4
+
+rectangle OrderManagement {
+    usecase m1 as "Approve order
+    --
+    Add an order to the list
+    that will be bought later"
+
+    usecase m2 as "Reject order
+    --
+    Reject an order with a comment
+    giving a reason "why""
+
+    usecase m3 as "Buy
+    --
+    Mark order as bought
+    (transaction happened)"
+
+    usecase m4 as "Deliver
+    --
+    Mark as delivered
+    (goods are in the building)"
+}
+
+office -> m1
+office -> m2
+office -> m3
+office -> m4
+
+@enduml
